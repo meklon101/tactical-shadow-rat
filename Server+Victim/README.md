@@ -62,7 +62,7 @@ pip install pynput pillow
 ## Usage
 
 1. Configure the server address and port in `client.py`:
-   - `SERVER_HOST = "192.168.1.140"`
+   - `SERVER_HOST = "SERVER_IP"`
    - `SERVER_PORT = 8080`
 2. Start the server:
 
@@ -82,13 +82,6 @@ python client.py
    - `Get Hash (logs.txt)` — compute SHA-256 digest for the log file
    - `TERMINATE` — disconnect client
    - Custom shell command entry — execute arbitrary commands remotely
-
----
-
-## Notes
-
-- The project is intended for educational and research purposes.
-- The code is best used in a controlled environment.
 
 ---
 

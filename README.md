@@ -100,8 +100,23 @@ Execute the client script on the remote host:
 
 Bash
 python "Server+Victim/client.py"
+
 🎮 Controller Dashboard Controls
-Command Entry Box: Type any OS command and press Enter or click Send Command.
+Command Entry Box: Type any OS command and press Enter or click Send Command
+
+### 💻 Executing Remote System Commands (Examples)
+You can run any native system command directly from the GUI entry field. Output from the client is captured via `subprocess` and streamed back live to the console window:
+
+| Target OS | Command | Description & Purpose |
+| :--- | :--- | :--- |
+| **Windows** | `dir` | List all files, folders, and directories in the current path. |
+| **Windows** | `whoami` | Check current logged-in user and privilege levels. |
+| **Windows** | `ipconfig /all` | View network interfaces, IP addresses, and DNS configuration. |
+| **Windows** | `tasklist` | View all active running processes on the host. |
+| **Linux (Kali)** | `ls -la` | List all files and directories (including hidden files & permissions). |
+| **Linux (Kali)** | `pwd` | Print the current working directory path. |
+| **Cross-Platform** | `ping -c 4 8.8.8.8` | Test internet and network connectivity from the client side. |
+
 
 Screenshot Button: Requests a screen capture. The incoming image is automatically decoded, saved under screenshots/, and displayed in a popup window.
 

@@ -71,8 +71,8 @@ tactical-shadow-rat/
 🚀 Setup & Installation Guide
 1. Install Dependencies
 Install required Python modules:
-'''
-Bash
+
+'''Bash
 pip install -r requirements.txt
 '''
 '''

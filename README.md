@@ -1,3 +1,4 @@
+Markdown
 # 🖥️ Remote Management & Administration Tool (Python Proof-of-Concept)
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
@@ -33,7 +34,6 @@ The framework consists of two primary components communicating over encrypted TC
   │ • Quick Control Panel   │                     │ • Screenshot Capture     │
   │ • Image Render Engine   │                     │ • Keystroke Monitoring   │
   └─────────────────────────┘                     └──────────────────────────┘
-'''
 🔐 Communication & Data Flow Protocol
 JSON Serialization: Commands and exfiltrated data are packaged into standard JSON objects.
 
@@ -55,6 +55,7 @@ XOR Encryption: Messages are obfuscated on-the-fly using a symmetric byte-level 
 🖥️ Operator GUI Panel: Interactive Tkinter control board with automatic image scaling via PIL/Pillow.
 
 📂 Project Structure
+Plaintext
 tactical-shadow-rat/
 ├── Server+Victim/
 │   ├── server.py       # Management Controller GUI (Runs on Kali Linux / Windows)
@@ -67,14 +68,48 @@ tactical-shadow-rat/
 ├── .gitignore          # Ignores temp caches and screenshots
 ├── README.md           # Documentation & Architecture Overview
 └── requirements.txt    # Python dependencies
-
 🚀 Setup & Installation Guide
 1. Install Dependencies
 Install required Python modules:
 
-'''Bash
+Bash
 pip install -r requirements.txt
-'''
-'''
-pip install -r requirements.txt
-'''
+🐧 Additional Setup for Kali Linux (Server Host):
+Because Tkinter and PIL display bindings are packaged separately in Linux repositories, run the following command before starting the server:
+
+Bash
+sudo apt update
+sudo apt install -y python3-tk python3-pil python3-pil.imagetk
+2. Configuration
+Before running, update the network connection settings in Server+Victim/client.py:
+
+Python
+# Set SERVER_HOST to your Controller IP address (e.g., Kali Linux IP)
+SERVER_HOST = "192.168.1.100"
+SERVER_PORT = 8080
+3. Execution Steps
+Step 1: Start the Controller (Server)
+Launch the GUI interface:
+
+Bash
+python "Server+Victim/server.py"
+Step 2: Run the Remote Agent (Client)
+Execute the client script on the remote host:
+
+Bash
+python "Server+Victim/client.py"
+🎮 Controller Dashboard Controls
+Command Entry Box: Type any OS command and press Enter or click Send Command.
+
+Screenshot Button: Requests a screen capture. The incoming image is automatically decoded, saved under screenshots/, and displayed in a popup window.
+
+Keylogger Logs Button: Exfiltrates accumulated keystroke data.
+
+Get Hash Button: Calculates and returns the SHA-256 checksum of logs.txt.
+
+TERMINATE Button: Sends a graceful termination command to shutdown the remote agent process.
+
+⚠️ Disclaimer
+Educational and Authorized Testing Only
+
+This software is created solely for educational purposes, architecture research, and authorized security assessments. Deploying or executing this tool against systems without explicit, mutual written authorization is strictly prohibited.

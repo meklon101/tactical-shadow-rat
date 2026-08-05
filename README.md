@@ -67,8 +67,8 @@ tactical-shadow-rat/
 ├── .gitignore          # Ignores temp caches and screenshots
 ├── README.md           # Documentation & Architecture Overview
 └── requirements.txt    # Python dependencies
-🚀 Setup & Installation Guide
 
+🚀 Setup & Installation Guide
 1. Install Dependencies
 Install required Python modules:
 
@@ -102,9 +102,9 @@ Bash
 python "Server+Victim/client.py"
 
 🎮 Controller Dashboard Controls
-Command Entry Box: Type any OS command and press Enter or click Send Command
+Command Entry Box: Type any OS command and press Enter or click Send Command.
 
-### 💻 Executing Remote System Commands (Examples)
+💻 Executing Remote System Commands (Examples).
 You can run any native system command directly from the GUI entry field. Output from the client is captured via `subprocess` and streamed back live to the console window:
 
 | Target OS | Command | Description & Purpose |
@@ -113,6 +113,7 @@ You can run any native system command directly from the GUI entry field. Output 
 | **Windows** | `whoami` | Check current logged-in user and privilege levels. |
 | **Windows** | `ipconfig /all` | View network interfaces, IP addresses, and DNS configuration. |
 | **Windows** | `tasklist` | View all active running processes on the host. |
+
 | **Linux (Kali)** | `ls -la` | List all files and directories (including hidden files & permissions). |
 | **Linux (Kali)** | `pwd` | Print the current working directory path. |
 | **Cross-Platform** | `ping -c 4 8.8.8.8` | Test internet and network connectivity from the client side. |
@@ -125,8 +126,3 @@ Keylogger Logs Button: Exfiltrates accumulated keystroke data.
 Get Hash Button: Calculates and returns the SHA-256 checksum of logs.txt.
 
 TERMINATE Button: Sends a graceful termination command to shutdown the remote agent process.
-
-⚠️ Disclaimer
-Educational and Authorized Testing Only
-
-This software is created solely for educational purposes, architecture research, and authorized security assessments. Deploying or executing this tool against systems without explicit, mutual written authorization is strictly prohibited.

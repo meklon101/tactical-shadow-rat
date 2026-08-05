@@ -93,7 +93,7 @@ SERVER_PORT = 8080
 Step 1: Start the Controller (Server)
 Launch the GUI interface:
 
-Bash
+'''Bash
 python "Server+Victim/server.py"
 Step 2: Run the Remote Agent (Client)
 Execute the client script on the remote host:

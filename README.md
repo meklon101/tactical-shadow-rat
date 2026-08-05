@@ -68,6 +68,7 @@ tactical-shadow-rat/
 ├── README.md           # Documentation & Architecture Overview
 └── requirements.txt    # Python dependencies
 🚀 Setup & Installation Guide
+
 1. Install Dependencies
 Install required Python modules:
 
@@ -79,6 +80,7 @@ Because Tkinter and PIL display bindings are packaged separately in Linux reposi
 Bash
 sudo apt update
 sudo apt install -y python3-tk python3-pil python3-pil.imagetk
+
 2. Configuration
 Before running, update the network connection settings in Server+Victim/client.py:
 
@@ -86,6 +88,7 @@ Python
 # Set SERVER_HOST to your Controller IP address (e.g., Kali Linux IP)
 SERVER_HOST = "192.168.1.100"
 SERVER_PORT = 8080
+
 3. Execution Steps
 Step 1: Start the Controller (Server)
 Launch the GUI interface:

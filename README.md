@@ -1,237 +1,279 @@
-🖥️ Python Remote Management Framework (Client-Server Architecture)
+# 🖥️ Python Remote Management Framework  
+## Client-Server Architecture (Python Proof of Concept)
 
-""Python" (https://img.shields.io/badge/Python-3.8%2B-blue.svg)" (https://www.python.org/)
-""Platform" (https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey.svg)"
-""License" (https://img.shields.io/badge/License-MIT-green.svg)"
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-A lightweight cross-platform remote management framework built with Python, TCP Sockets, and Tkinter GUI.
+A Python-based client-server framework built with **Python**, **TCP Socket Programming**, **JSON communication**, and **Tkinter GUI**.
 
-This project demonstrates client-server communication, bidirectional data transfer, remote command execution, screenshot capture, event monitoring, file integrity verification, and graphical control management.
-
----
-
-📷 Screenshots & Demo
-
-«Add your screenshots here before publishing the project.»
-
-Example:
-
-Controller Dashboard| Client Screenshot
-Add image here| Add image here
+This project demonstrates client-server architecture, bidirectional communication, graphical control interface, network programming concepts, screenshot transfer, file integrity verification, and Python application development.
 
 ---
 
-🏗️ System Architecture
+# 🏗️ System Architecture
 
-The project contains two main components:
+The project follows a client-server architecture:
 
-┌─────────────────────────┐                 ┌──────────────────────────┐
-│    Management Server    │                 │        Remote Client      │
-│    (Controller GUI)     │                 │                          │
-│                         │                 │                          │
-│ • Tkinter Interface     │ <=============> │ • Command Execution      │
-│ • Command Management    │   TCP Socket    │ • Screenshot Capture     │
-│ • Response Display      │                 │ • File Processing        │
-│ • Data Handling         │                 │ • Event Monitoring        │
-│                         │                 │                          │
-└─────────────────────────┘                 └──────────────────────────┘
+```text
+                 TCP Communication
+                       |
+                       |
+          +------------+------------+
+          |                         |
+          v                         v
 
----
++--------------------+      +--------------------+
+|     Server GUI     |      |       Client       |
+|    Controller      |      |    Remote Side     |
++--------------------+      +--------------------+
+|                    |      |                    |
+| Tkinter Interface  |      | Command Handling   |
+| Send Requests      |      | Data Processing    |
+| Receive Responses  |      | Screenshot Capture |
+| Display Results    |      | File Operations    |
+|                    |      |                    |
++--------------------+      +--------------------+
+```
 
-🔐 Communication Protocol
-
-The system uses the following communication process:
+## Communication Flow
 
 1. Data is converted into JSON format.
-2. Messages are transferred through TCP sockets.
-3. XOR-based encoding is applied for basic payload obfuscation.
-4. A 4-byte length header is added to ensure complete message delivery.
+2. Messages are transferred using TCP sockets.
+3. XOR-based encoding is used for basic payload obfuscation.
+4. A 4-byte length header helps maintain complete message delivery.
 
 ---
 
-🌟 Key Features
+# 📸 Screenshots & Demo
 
-💻 Remote Command Execution
+Visual demonstration of the project interface and main features.
 
-Execute system commands remotely and receive real-time output.
+## 🖥️ Server GUI Interface
 
-📸 Screenshot Capture
+_Add screenshot here:_
 
-Capture screenshots from the connected client and transfer them to the management interface.
+<!-- SERVER_GUI_IMAGE -->
 
-⌨️ Keyboard Event Monitoring
+<br>
 
-Monitor keyboard events and store collected data locally.
+## 🔗 Client-Server Connection
 
-🔒 SHA-256 File Integrity Verification
+_Add screenshot here:_
 
-Generate SHA-256 hashes to verify file integrity.
+<!-- CLIENT_CONNECTION_IMAGE -->
 
-🔄 Connection Management
+<br>
 
-Maintain communication between client and server and handle connection interruptions.
+## ⚙️ Feature Demonstration
 
-🖥️ Graphical Control Interface
+_Add screenshots showing the main features here:_
 
-Interactive Tkinter GUI for managing communication and displaying responses.
+<!-- FEATURE_IMAGES -->
 
 ---
 
-📂 Project Structure
+# 📂 Project Structure
 
+```text
 tactical-shadow-rat/
 
 ├── Server+Victim/
-│   ├── server.py        # Management Server GUI
-│   └── client.py        # Client Application
+│   ├── server.py          # Server GUI application
+│   └── client.py          # Client application
 │
 ├── TrojanClient/
-│   ├── victim.exe       # Executable build
-│   ├── victim.bat       # Windows launcher script
-│   ├── image.jpg        # Image file
-│   └── logs.txt         # Log file
+│   ├── victim.exe         # Executable build
+│   ├── victim.bat         # Windows launcher
+│   ├── image.jpg          # Image resource
+│   └── logs.txt           # Log file
 │
-├── requirements.txt     # Python dependencies
-├── README.md            # Project documentation
+├── requirements.txt       # Python dependencies
+├── README.md              # Documentation
 └── .gitignore
+```
 
 ---
 
-🚀 Installation & Setup
+# 🚀 Installation
 
-1. Clone Repository
+## 1. Clone Repository
 
+```bash
 git clone https://github.com/meklon101/tactical-shadow-rat.git
+```
 
-Enter the project folder:
+## 2. Enter Project Directory
 
+```bash
 cd tactical-shadow-rat
+```
 
----
+## 3. Install Dependencies
 
-2. Install Dependencies
-
+```bash
 pip install -r requirements.txt
+```
 
 ---
 
-🐧 Kali Linux Setup
+# 🐧 Kali Linux Setup
 
-Install required GUI packages:
+For Linux environments install the required GUI packages:
 
+```bash
 sudo apt update
+```
 
+```bash
 sudo apt install python3-tk python3-pil python3-pil.imagetk
+```
 
 ---
 
-⚙️ Configuration
+# ⚙️ Configuration
 
-Before running the client, update the server address:
+Before running the client, update the server address.
 
-File:
+Open:
 
+```text
 Server+Victim/client.py
+```
 
 Change:
 
+```python
 SERVER_HOST = "127.0.0.1"
+```
 
-To the server machine IP:
+To the server machine IP address:
 
+```python
 SERVER_HOST = "192.168.1.100"
+```
 
-Keep the same port:
+The communication port:
 
+```python
 SERVER_PORT = 8080
+```
 
 ---
 
-▶️ Running the Project
+# ▶️ Running the Project
 
-Start Server
+## Start Server
 
-Navigate to the server folder:
+Open terminal:
 
+```bash
 cd Server+Victim
+```
 
 Run:
 
+```bash
 python server.py
+```
+
+The Tkinter management interface will start.
 
 ---
 
-Start Client
+## Start Client
 
 Open another terminal:
 
+```bash
 cd Server+Victim
+```
 
 Run:
 
+```bash
 python client.py
+```
+
+After connection, communication can be managed from the server interface.
 
 ---
 
-🎮 Available Commands
+# 💻 Available Commands
 
-Examples of system commands:
+The system supports sending operating system commands through the management interface.
 
-Windows
+## Windows Commands
 
+### Show files and folders
+
+```bash
 dir
+```
 
-List files and folders.
+### Display current user
 
+```bash
 whoami
+```
 
-Display current user information.
+### Display network configuration
 
+```bash
 ipconfig
-
-Display network configuration.
+```
 
 ---
 
-Linux
+## Linux Commands
 
+### List files
+
+```bash
 ls -la
+```
 
-List files and permissions.
+### Show current directory
 
+```bash
 pwd
+```
 
-Display current directory.
+### Display network interfaces
 
+```bash
 ip a
-
-Display network interfaces.
-
----
-
-🔘 GUI Controls
-
-The management interface provides:
-
-Screenshot
-
-Requests and displays a screenshot from the connected client.
-
-Logs
-
-Retrieves stored keyboard event logs.
-
-Hash
-
-Calculates SHA-256 checksum.
-
-Terminate
-
-Stops the client process.
+```
 
 ---
 
-🛠️ Technologies Used
+# 🎮 GUI Controls
+
+The management interface includes:
+
+| Control | Description |
+|---|---|
+| Send Command | Send commands to the connected client |
+| Screenshot | Request screenshot capture |
+| Keylogger Logs | Retrieve stored log information |
+| Get Hash | Calculate SHA-256 checksum |
+| TERMINATE | Stop the client process |
+
+---
+
+# 🔐 Security & Communication
+
+The project demonstrates:
+
+- TCP socket communication.
+- JSON serialization.
+- XOR-based message encoding.
+- SHA-256 hashing.
+- Client-server data exchange.
+
+---
+
+# 🛠️ Technologies Used
 
 - Python 3
 - TCP Socket Programming
@@ -244,25 +286,28 @@ Stops the client process.
 
 ---
 
-📚 Project Purpose
+# 📚 Learning Objectives
 
-This project was developed for educational purposes to demonstrate:
+This project demonstrates:
 
 - Client-server architecture.
 - Network programming.
 - Python application development.
-- GUI development.
-- Security concepts.
+- GUI programming.
 - Data communication.
+- File integrity concepts.
 
 ---
 
-⚠️ Disclaimer
+# ⚠️ Disclaimer
 
-This project is intended only for:
+This project was created for educational purposes only.
 
-- Educational purposes.
-- Authorized testing.
-- Controlled laboratory environments.
+Use only in:
+- Personal testing environments.
+- Authorized laboratories.
+- Systems where you have permission.
 
-Using this software on systems without permission is prohibited.
+Unauthorized use on systems without permission is prohibited.
+
+---

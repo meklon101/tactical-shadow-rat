@@ -138,7 +138,7 @@ Before running the client, update the server address.
 Open:
 
 ```text
-Server+Victim/client.py
+notepad Server+Victim/client.py
 ```
 
 Change:
@@ -150,7 +150,7 @@ SERVER_HOST = "127.0.0.1"
 To the server machine IP address:
 
 ```python
-SERVER_HOST = "192.168.1.100"
+SERVER_HOST = "IP"
 ```
 
 The communication port:
@@ -182,18 +182,23 @@ The Tkinter management interface will start.
 ---
 
 ## Start Client
-
 Open another terminal:
 
+**Method 1: Using Python (Terminal)**
+You can run the client using one of the following methods:
+
 ```bash
-cd Server+Victim
+cd tactical-shadow-rat/TrojanClient
 ```
 
 Run:
 
 ```bash
-python client.py
+python victim.py
 ```
+**Method 2: Using the Batch Launcher (Windows)**
+Navigate to the `TrojanClient` folder and double-click:
+`victim.bat`
 
 After connection, communication can be managed from the server interface.
 

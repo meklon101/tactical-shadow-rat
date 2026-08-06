@@ -92,7 +92,7 @@ git clone https://github.com/meklon101/python-remote-management-framework.git
 ## 2. Enter Project Directory
 
 ```bash
-cd tactical-shadow-rat
+cd python-remote-management-framework
 ```
 
 ## 3. Install Dependencies

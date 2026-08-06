@@ -1,8 +1,8 @@
-# Tactical Shadow RAT
+# Python Remote Management Framework
 
 ## Project Summary
 
-Tactical Shadow RAT is a Python-based remote access tool built with a client-server architecture. It provides remote command execution, keystroke capture, screen capture, and file identification features while maintaining connection resilience and basic traffic obfuscation.
+Python Remote Management Framework is a Python-based remote access tool built with a client-server architecture. It provides remote command execution, keystroke capture, screen capture, and file identification features while maintaining connection resilience and basic traffic obfuscation.
 
 ---
 

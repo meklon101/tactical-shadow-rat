@@ -50,27 +50,13 @@ The project follows a client-server architecture:
 Visual demonstration of the project interface and main features.
 
 ## 🖥️ Server GUI Interface
-
-_Add screenshot here:_
-
-<!-- SERVER_GUI_IMAGE -->
-
-<br>
+<img src="images/server-gui.png" width="400">
 
 ## 🔗 Client-Server Connection
-
-_Add screenshot here:_
-
-<!-- CLIENT_CONNECTION_IMAGE -->
-
-<br>
+<img src="images/client-connection.png" width="400">
 
 ## ⚙️ Feature Demonstration
-
-_Add screenshots showing the main features here:_
-
-<!-- FEATURE_IMAGES -->
-
+<img src="images/feature-demo.png" width="400">
 ---
 
 # 📂 Project Structure

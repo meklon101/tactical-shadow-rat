@@ -1,115 +1,268 @@
-Markdown
-# 🖥️ Remote Management & Administration Tool (Python Proof-of-Concept)
+🖥️ Python Remote Management Framework (Client-Server Architecture)
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20(Kali)-lightgrey.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+""Python" (https://img.shields.io/badge/Python-3.8%2B-blue.svg)" (https://www.python.org/)
+""Platform" (https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey.svg)"
+""License" (https://img.shields.io/badge/License-MIT-green.svg)"
 
-A lightweight, cross-platform Remote Administration Tool (RAT) architecture built with **Python**, **TCP Sockets**, and a **Tkinter Graphical User Interface (GUI)**. 
+A lightweight cross-platform remote management framework built with Python, TCP Sockets, and Tkinter GUI.
 
-This project demonstrates how client-server systems handle bidirectional data flow, custom obfuscation, remote shell execution, and live event monitoring across Windows and Linux environments.
-
----
-
-## 📷 Screenshots & Demo
-
-> *Add your demonstration screenshots below before sharing on LinkedIn:*
-
-| Controller Dashboard (GUI) | Client Screenshot Capture |
-| :---: | :---: |
-| ![Controller Interface](docs/dashboard.png) | ![Captured Screen](docs/screenshot_demo.png) |
+This project demonstrates client-server communication, bidirectional data transfer, remote command execution, screenshot capture, event monitoring, file integrity verification, and graphical control management.
 
 ---
 
-## 🏗️ How the System Works
+📷 Screenshots & Demo
 
-The framework consists of two primary components communicating over encrypted TCP sockets:
+«Add your screenshots here before publishing the project.»
 
-```text
-  ┌─────────────────────────┐                     ┌──────────────────────────┐
-  │   Management Server     │                     │       Remote Client      │
-  │   (Controller GUI)      │ <=== Encrypted ===> │     (Target System)      │
-  │                         │      TCP Stream     │                          │
-  │ • Real-time Output Log  │     (Port 8080)     │ • Shell Execution        │
-  │ • Quick Control Panel   │                     │ • Screenshot Capture     │
-  │ • Image Render Engine   │                     │ • Keystroke Monitoring   │
-  └─────────────────────────┘                     └──────────────────────────┘
-🔐 Communication & Data Flow Protocol
-JSON Serialization: Commands and exfiltrated data are packaged into standard JSON objects.
+Example:
 
-XOR Encryption: Messages are obfuscated on-the-fly using a symmetric byte-level XOR mechanism (KEY = b'simple_xor_key').
+Controller Dashboard| Client Screenshot
+Add image here| Add image here
 
-4-Byte Length Header: Packets are prepended with a 4-byte big-endian integer header indicating payload size, ensuring complete packet reassembly across TCP chunks without stream corruption.
+---
+
+🏗️ System Architecture
+
+The project contains two main components:
+
+┌─────────────────────────┐                 ┌──────────────────────────┐
+│    Management Server    │                 │        Remote Client      │
+│    (Controller GUI)     │                 │                          │
+│                         │                 │                          │
+│ • Tkinter Interface     │ <=============> │ • Command Execution      │
+│ • Command Management    │   TCP Socket    │ • Screenshot Capture     │
+│ • Response Display      │                 │ • File Processing        │
+│ • Data Handling         │                 │ • Event Monitoring        │
+│                         │                 │                          │
+└─────────────────────────┘                 └──────────────────────────┘
+
+---
+
+🔐 Communication Protocol
+
+The system uses the following communication process:
+
+1. Data is converted into JSON format.
+2. Messages are transferred through TCP sockets.
+3. XOR-based encoding is applied for basic payload obfuscation.
+4. A 4-byte length header is added to ensure complete message delivery.
+
+---
 
 🌟 Key Features
-💻 Interactive Remote Shell: Execute system terminal commands (e.g., whoami, ipconfig, ls -la) remotely with real-time feedback.
 
-📸 Cross-Platform Screenshot Capture: Uses the high-performance mss library to capture primary displays seamlessly on Windows and Linux (Base64 encoded).
+💻 Remote Command Execution
 
-⌨️ Keystroke Log Collection: Background monitoring using pynput with thread-safe file handling (log_lock).
+Execute system commands remotely and receive real-time output.
 
-🔒 Data Integrity Check: On-demand SHA-256 hash calculation (hashlib) to verify log file integrity.
+📸 Screenshot Capture
 
-🔄 Resilient Reconnection Loop: Built-in exponential backoff retry mechanism preventing client failure during network drops.
+Capture screenshots from the connected client and transfer them to the management interface.
 
-🖥️ Operator GUI Panel: Interactive Tkinter control board with automatic image scaling via PIL/Pillow.
+⌨️ Keyboard Event Monitoring
+
+Monitor keyboard events and store collected data locally.
+
+🔒 SHA-256 File Integrity Verification
+
+Generate SHA-256 hashes to verify file integrity.
+
+🔄 Connection Management
+
+Maintain communication between client and server and handle connection interruptions.
+
+🖥️ Graphical Control Interface
+
+Interactive Tkinter GUI for managing communication and displaying responses.
+
+---
 
 📂 Project Structure
-Plaintext
+
 tactical-shadow-rat/
+
 ├── Server+Victim/
-│   ├── server.py       # Management Controller GUI (Runs on Kali Linux / Windows)
-│   └── client.py       # Remote Agent Client (Runs on Target Host)
+│   ├── server.py        # Management Server GUI
+│   └── client.py        # Client Application
+│
 ├── TrojanClient/
-│   ├── victim.exe      # Executable launcher build
-│   ├── victim.bat      # Windows batch script wrapper
-│   ├── image.jpg       # Decoy display image
-│   └── logs.txt        # Keystroke store
-├── .gitignore          # Ignores temp caches and screenshots
-├── README.md           # Documentation & Architecture Overview
-└── requirements.txt    # Python dependencies
-🚀 Setup & Installation Guide
-1. Install Dependencies
-Install required Python modules:
+│   ├── victim.exe       # Executable build
+│   ├── victim.bat       # Windows launcher script
+│   ├── image.jpg        # Image file
+│   └── logs.txt         # Log file
+│
+├── requirements.txt     # Python dependencies
+├── README.md            # Project documentation
+└── .gitignore
 
-Bash
+---
+
+🚀 Installation & Setup
+
+1. Clone Repository
+
+git clone https://github.com/meklon101/tactical-shadow-rat.git
+
+Enter the project folder:
+
+cd tactical-shadow-rat
+
+---
+
+2. Install Dependencies
+
 pip install -r requirements.txt
-🐧 Additional Setup for Kali Linux (Server Host):
-Because Tkinter and PIL display bindings are packaged separately in Linux repositories, run the following command before starting the server:
 
-Bash
+---
+
+🐧 Kali Linux Setup
+
+Install required GUI packages:
+
 sudo apt update
-sudo apt install -y python3-tk python3-pil python3-pil.imagetk
-2. Configuration
-Before running, update the network connection settings in Server+Victim/client.py:
 
-Python
-# Set SERVER_HOST to your Controller IP address (e.g., Kali Linux IP)
+sudo apt install python3-tk python3-pil python3-pil.imagetk
+
+---
+
+⚙️ Configuration
+
+Before running the client, update the server address:
+
+File:
+
+Server+Victim/client.py
+
+Change:
+
+SERVER_HOST = "127.0.0.1"
+
+To the server machine IP:
+
 SERVER_HOST = "192.168.1.100"
+
+Keep the same port:
+
 SERVER_PORT = 8080
-3. Execution Steps
-Step 1: Start the Controller (Server)
-Launch the GUI interface:
 
-Bash
-python "Server+Victim/server.py"
-Step 2: Run the Remote Agent (Client)
-Execute the client script on the remote host:
+---
 
-Bash
-python "Server+Victim/client.py"
-🎮 Controller Dashboard Controls
-Command Entry Box: Type any OS command and press Enter or click Send Command.
+▶️ Running the Project
 
-Screenshot Button: Requests a screen capture. The incoming image is automatically decoded, saved under screenshots/, and displayed in a popup window.
+Start Server
 
-Keylogger Logs Button: Exfiltrates accumulated keystroke data.
+Navigate to the server folder:
 
-Get Hash Button: Calculates and returns the SHA-256 checksum of logs.txt.
+cd Server+Victim
 
-TERMINATE Button: Sends a graceful termination command to shutdown the remote agent process.
+Run:
+
+python server.py
+
+---
+
+Start Client
+
+Open another terminal:
+
+cd Server+Victim
+
+Run:
+
+python client.py
+
+---
+
+🎮 Available Commands
+
+Examples of system commands:
+
+Windows
+
+dir
+
+List files and folders.
+
+whoami
+
+Display current user information.
+
+ipconfig
+
+Display network configuration.
+
+---
+
+Linux
+
+ls -la
+
+List files and permissions.
+
+pwd
+
+Display current directory.
+
+ip a
+
+Display network interfaces.
+
+---
+
+🔘 GUI Controls
+
+The management interface provides:
+
+Screenshot
+
+Requests and displays a screenshot from the connected client.
+
+Logs
+
+Retrieves stored keyboard event logs.
+
+Hash
+
+Calculates SHA-256 checksum.
+
+Terminate
+
+Stops the client process.
+
+---
+
+🛠️ Technologies Used
+
+- Python 3
+- TCP Socket Programming
+- JSON
+- Tkinter
+- Pillow
+- Pynput
+- Threading
+- Hashlib
+
+---
+
+📚 Project Purpose
+
+This project was developed for educational purposes to demonstrate:
+
+- Client-server architecture.
+- Network programming.
+- Python application development.
+- GUI development.
+- Security concepts.
+- Data communication.
+
+---
 
 ⚠️ Disclaimer
-Educational and Authorized Testing Only
 
-This software is created solely for educational purposes, architecture research, and authorized security assessments. Deploying or executing this tool against systems without explicit, mutual written authorization is strictly prohibited.
+This project is intended only for:
+
+- Educational purposes.
+- Authorized testing.
+- Controlled laboratory environments.
+
+Using this software on systems without permission is prohibited.

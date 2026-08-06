@@ -38,8 +38,8 @@ The communication layer transmits encrypted JSON payloads with a fixed XOR key. 
 
 ## Trojan Packaging
 
-The victim client is designed to run as a Trojans-style executable concealed with an `image.jpg` cover image. When launched, the image appears in Windows Photo Viewer while the RAT code runs in the background.
-
+The victim client is designed to run as a Trojan-style executable concealed with a cover image. 
+When launched, a sample image automatically opens on the screen as a **visual decoy** to mislead the user into thinking a normal picture was opened, while the RAT code silently establishes a background TCP connection to the server.
 ---
 
 ## Installation
@@ -62,7 +62,7 @@ pip install pynput pillow
 ## Usage
 
 1. Configure the server address and port in `client.py`:
-   - `SERVER_HOST = "SERVER_IP"`
+   - `SERVER_HOST = "SERVER_IP"` *(Use your server IP, or "127.0.0.1" for local testing)*
    - `SERVER_PORT = 8080`
 2. Start the server:
 
@@ -73,7 +73,7 @@ python server.py
 3. Start the client on the target machine:
 
 ```bash
-python client.py
+python client.bat
 ```
 
 4. Control the client from the GUI:

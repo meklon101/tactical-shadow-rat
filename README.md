@@ -62,7 +62,7 @@ Visual demonstration of the project interface and main features.
 # 📂 Project Structure
 
 ```text
-tactical-shadow-rat/
+python-remote-management-framework/
 
 ├── Server+Victim/
 │   ├── server.py          # Server GUI application
@@ -86,7 +86,7 @@ tactical-shadow-rat/
 ## 1. Clone Repository
 
 ```bash
-git clone https://github.com/meklon101/tactical-shadow-rat.git
+git clone https://github.com/meklon101/python-remote-management-framework.git
 ```
 
 ## 2. Enter Project Directory
